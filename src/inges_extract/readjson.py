@@ -31,13 +31,11 @@ schema: StructType = StructType(
                         StructField(
                             name="firstname", dataType=StringType(), nullable=True
                         ),
-                        StructField(
-                            name="id", dataType=StringType(), nullable=True),
+                        StructField(name="id", dataType=StringType(), nullable=True),
                         StructField(
                             name="motivation", dataType=StringType(), nullable=True
                         ),
-                        StructField(
-                            name="share", dataType=StringType(), nullable=True),
+                        StructField(name="share", dataType=StringType(), nullable=True),
                         StructField(
                             name="surname", dataType=StringType(), nullable=True
                         ),
@@ -46,8 +44,7 @@ schema: StructType = StructType(
             ),
             nullable=True,
         ),
-        StructField(name="overallMotivation",
-                    dataType=StringType(), nullable=True),
+        StructField(name="overallMotivation", dataType=StringType(), nullable=True),
         StructField(name="year", dataType=DoubleType(), nullable=True),
     ]
 )

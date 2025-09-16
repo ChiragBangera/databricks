@@ -13,6 +13,8 @@ services:
     environment:
       - SPARK_MODE=master
       - PYTHONPATH=/app/.venv/lib/python3.12/site-packages
+      - PYSPARK_PYTHON=/app/.venv/bin/python
+      - PYSPARK_DRIVER_PYTHON=/app/.venv/bin/python
     working_dir: /app/src
     networks:
       - spark-network
@@ -26,6 +28,9 @@ services:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
       - SPARK_WORKER_MEMORY=2G
+      - PYTHONPATH=/app/.venv/lib/python3.12/site-packages
+      - PYSPARK_PYTHON=/app/.venv/bin/python
+      - PYSPARK_DRIVER_PYTHON=/app/.venv/bin/python
       - SPARK_WORKER_CORES=2
     ports:
       - "8081:8081"
@@ -41,6 +46,9 @@ services:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
       - SPARK_WORKER_MEMORY=2G
+      - PYTHONPATH=/app/.venv/lib/python3.12/site-packages
+      - PYSPARK_PYTHON=/app/.venv/bin/python
+      - PYSPARK_DRIVER_PYTHON=/app/.venv/bin/python
       - SPARK_WORKER_CORES=2
     ports:
       - "8082:8082"
