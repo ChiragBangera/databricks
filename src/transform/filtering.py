@@ -67,3 +67,12 @@ filtered_df.show(n=5)
 # filter date range
 filtered_df = df.filter(f.col("date_added").between("2021-02-01", "2021-03-01"))
 filtered_df.show()
+
+
+# filter on arrays
+df_recipes = spark.read.parquet("s3a://databricks-bucket/recipes.parquet")
+df_recipes.select(f.col("RecipeIngredientParts")).show()
+
+filtered_df = df_recipes.filter(
+    f.array_contains(f.col("RecipeIngredientParts"), "apple")
+)
