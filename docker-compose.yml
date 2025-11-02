@@ -3,13 +3,14 @@ services:
     build:
       context: .
     hostname: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     volumes:
-      - ./src:/app/src # persiting code files
+      - ./src:/app/src
     ports:
       - "7077:7077"
       - "8080:8080"
     environment:
-      - SPARK_MODE=master
+      - SPARK_NO_DAEMONIZE=true
       - PYTHONPATH=/app/.venv/lib/python3.12/site-packages
       - PYSPARK_PYTHON=/app/.venv/bin/python
       - PYSPARK_DRIVER_PYTHON=/app/.venv/bin/python
@@ -20,16 +21,16 @@ services:
   spark-worker-1:
     build: .
     hostname: spark-worker-1
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     depends_on:
       - spark-master
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_NO_DAEMONIZE=true
       - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
       - PYTHONPATH=/app/.venv/lib/python3.12/site-packages
       - PYSPARK_PYTHON=/app/.venv/bin/python
       - PYSPARK_DRIVER_PYTHON=/app/.venv/bin/python
-      - SPARK_WORKER_CORES=2
     ports:
       - "8081:8081"
     networks:
@@ -38,16 +39,16 @@ services:
   spark-worker-2:
     build: .
     hostname: spark-worker-2
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     depends_on:
       - spark-master
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_NO_DAEMONIZE=true
       - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
       - PYTHONPATH=/app/.venv/lib/python3.12/site-packages
       - PYSPARK_PYTHON=/app/.venv/bin/python
       - PYSPARK_DRIVER_PYTHON=/app/.venv/bin/python
-      - SPARK_WORKER_CORES=2
     ports:
       - "8082:8082"
     networks:
@@ -57,10 +58,9 @@ services:
     image: confluentinc/cp-kafka:7.6.0
     hostname: kafka
     ports:
-      - "9092:9092" # External clients
-      - "9093:9093" # Internal broker listener
+      - "9092:9092"
+      - "9093:9093"
     environment:
-      # KRaft settings
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_NODE_ID: 1
@@ -82,8 +82,8 @@ services:
     hostname: minio
     command: server /data --console-address ":9001"
     ports:
-      - "9000:9000" # S3 API
-      - "9001:9001" # Console
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
