@@ -2,6 +2,7 @@ from math import trunc
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as f
 
+
 spark = (
     SparkSession.builder.master("spark://spark-master:7077")
     .config("spark.executor.memory", "512m")
@@ -13,15 +14,19 @@ spark = (
     .getOrCreate()
 )
 
-spark.sparkContext.setLogLevel("ERROR")
 
+spark.sparkContext.setLogLevel("ERROR")
 
 csv_reader_config = {
     "header": "true",
-    "multiLine": "true",
-    "nullValues": "null",
+    "inferSchema": "false",
     "escape": '"',
+    "mode": "PERMISSIVE",  # Don't fail on malformed data
+    "columnNameOfCorruptRecord": "_corrupt_record",
+    "quote": '"',
+    "sep": ",",
 }
+
 
 cards_df = spark.read.options(**csv_reader_config).csv(
     "s3a://databricks-bucket/Credit Card/CardBase.csv"

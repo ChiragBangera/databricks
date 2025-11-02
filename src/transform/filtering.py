@@ -5,7 +5,7 @@ from pyspark.sql import types as t
 spark = (
     SparkSession.builder.appName("filtering")
     .master("spark://spark-master:7077")
-    .config("spark.executor.memeory", "512m")
+    .config("spark.executor.memory", "512m")
     .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000")
     .config("spark.hadoop.fs.s3a.access.key", "minioadmin")
     .config("spark.hadoop.fs.s3a.secret.key", "minioadmin")
